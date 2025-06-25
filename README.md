@@ -36,6 +36,8 @@ blur ← ({(+/∘⍉,[1 2]⍵)÷(KERNELSIZE×KERNELSIZE)}⌺KERNELSIZE KERNELSIZ
 
 ### Python
 
+Not tested
+
 ```python
 def in_bounds(x, y, x_, y_):
     return 0 <= x_ < x and 0 <= y_ < y
@@ -86,6 +88,8 @@ void blur_image(unsigned char *input_bytes, unsigned char *output_bytes, int x, 
 
 ### Haskell
 
+Not tested
+
 ```hs
 import Data.Word
 
@@ -104,4 +108,18 @@ blurImage bytes x y d =
       | inBounds x y x' y' = index bytes x d x' y' d'
       | otherwise = 0
     avg = ((kernelsize*kernelsize)`div`) . sum
+```
+
+### Julia
+
+```julia
+kernelsize = 3
+
+function blur_image(input_bytes)
+    r = div(kernelsize, 2)
+    avg(xs) = div(sum(xs), (kernelsize*kernelsize))
+    at(J) = checkbounds(Bool, input_bytes, J) ? input_bytes[J] : 0
+    window(I) = avg(at.(CartesianIndices((-r:r,-r:r,0:0)).+I))
+    window.(keys(input_bytes))
+end
 ```
