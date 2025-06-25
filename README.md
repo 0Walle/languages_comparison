@@ -18,20 +18,22 @@ Some features:
 | Haskell  | **+**          | -               | **+**          | -                    | - |
 | APL      | **+**          | **+**           | **+**          | **+**                | + |
 
-C is here because is the classical example of imperative language.  
-Python is similar but with "modern" features and high adoption.  
-Julia is a modern language intended for scientific applications, which often involve N-Dim arrays so its a good candidate.  
-Haskell is the classical example of a functional language.  
-APL is here because its whole point is array programming, it's the language that started this project after all.  
+- C is here because is the classical example of imperative language.  
+- Python is similar but with "modern" features and high adoption.  
+- Julia is a modern language intended for scientific applications, which often involve N-Dim arrays so its a good candidate.  
+- Haskell is the classical example of a functional language.  
+- APL is here because its whole point is array programming, it's the language that started this project after all.  
 
 ## Image Blur (Convolution)
 
-The image has been loaded with some external library, but they all consist of arrays of unsigned bytes with shape (Height, Width, BitDepth).
+The image has been loaded with some external library, but they all consist of arrays of unsigned bytes with shape (Height, Width, Depth).
 
 ### APL (Dyalog APL)
 
 ```apl
-blur ← ({(+/∘⍉,[1 2]⍵)÷(KERNELSIZE×KERNELSIZE)}⌺KERNELSIZE KERNELSIZE) img    
+∇ blur ← BlurImage img
+    blur ← ({(+/∘⍉,[1 2]⍵)÷(KERNELSIZE×KERNELSIZE)}⌺KERNELSIZE KERNELSIZE) img
+∇
 ```
 
 ### Python
@@ -115,7 +117,7 @@ blurImage bytes x y d =
 ```julia
 kernelsize = 3
 
-function blur_image(input_bytes)
+function blurimage(input_bytes)
     r = div(kernelsize, 2)
     avg(xs) = div(sum(xs), (kernelsize*kernelsize))
     at(J) = checkbounds(Bool, input_bytes, J) ? input_bytes[J] : 0
