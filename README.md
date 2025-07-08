@@ -125,3 +125,72 @@ function blurimage(input_bytes)
     window.(keys(input_bytes))
 end
 ```
+
+## RGB to Gray
+
+Converting RGB to Gray consists of applying a dot product formula to (r, g, b) and some other magical component, (0.299, 0.587, 0.114) is a common one.
+
+### C
+
+```c
+int index(x, d, x_, y_, d_)
+{
+    return (y_*x+x_)*d+d_;
+}
+
+void rgb2gray(unsigned char *input_bytes, unsigned char *output_bytes, int x, int y, int depth)
+{
+    for (int y_ = 0; y_ < y; y_++)
+    for (int x_ = 0; x_ < x; x_++)
+    {
+        int i = index(x, depth, x_, y_, 0);
+        float sum = 0;
+        sum += input_bytes[i+0]*0.299;
+        sum += input_bytes[i+1]*0.587;
+        sum += input_bytes[i+2]*0.114;
+        output_bytes[index(x, 1, x_, y_, 0)] = (unsigned char)(sum);
+    }
+}
+```
+
+### Python
+
+```python
+def index(x, d, x_, y_, d_):
+    return (y_*x+x_)*d+d_
+
+GRAY_MASK = [0.299, 0.587, 0.114]
+
+def rgb2gray(input_bytes, output_bytes, x, y, depth):
+    for y_ in range(y):
+        for x_ in range(x):
+                output_bytes[index(x, 1, x_, y_, 0)] = int(sum(
+                    input_bytes[index(x, depth, x_, y_, i)] * f
+                    for i, f in enumerate(GRAY_MASK)
+                ))
+```
+
+### Haskell
+
+```hs
+import Data.Word
+
+index bytes x d x' y' d' = bytes !! ((y'*x+x')*d+d')
+
+grayMask = [0.299, 0.587, 0.114]
+
+rgb2gray :: [Word8] -> Int -> Int -> Int -> [Word8]
+rgb2gray bytes x y d =
+    [ (truncate . sum) $ zipWith (*) grayMask (rgb x' y')
+    | y' <- [0..y-1], x' <- [0..x-1] ]
+  where
+    rgb x' y' = [ fromIntegral $ index bytes x d x' y' d' | d' <- [0..3] ]
+```
+
+### Julia
+
+WIP
+
+### APL
+
+WIP
