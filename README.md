@@ -189,8 +189,18 @@ rgb2gray bytes x y d =
 
 ### Julia
 
-WIP
+```julia
+grayMask = [0.299, 0.587, 0.114]
+
+function rgb2gray(input_bytes)
+    sum(input_bytes[:,:,i]*f for (i,f)=enumerate(grayMask))
+end
+```
 
 ### APL
 
-WIP
+```apl
+∇ gray ← RGB2gray img
+  gray ← ⌊ +/ (0.299 0.587 0.114) ×[3] img
+∇
+```
